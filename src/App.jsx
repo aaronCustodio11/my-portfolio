@@ -134,6 +134,7 @@ const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
       <ProjectPage
         projects={PROJECTS}
         isDark={isDark}
+        initialIndex={selectedProject}
         onBack={() => setSelectedProject(null)}
       />
     )}
@@ -684,6 +685,27 @@ const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
               </CardSwap>
             </div>
 
+          </div>
+
+          <div className="flex justify-center mt-16">
+            <button
+              onClick={() => setSelectedProject(activeProject)}
+              className="flex items-center gap-3 px-6 py-3 rounded-full backdrop-blur-sm font-mono text-xs tracking-widest uppercase transition-all duration-300 hover:scale-105"
+              style={{
+                background: isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.05)',
+                color: textPrimary,
+                border: `1px solid ${cardBorder}`,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)'; e.currentTarget.style.borderColor = textSecondary }}
+              onMouseLeave={e => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.05)'; e.currentTarget.style.borderColor = cardBorder }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+              View All Projects
+            </button>
           </div>
         </div>
       </section>
