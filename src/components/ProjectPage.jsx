@@ -12,6 +12,9 @@ function DetailCarousel({ images, isDark, cardBorder, textMuted }) {
   const prev = useCallback(() => setCurrent(i => (i - 1 + images.length) % images.length), [images.length])
   const next = useCallback(() => setCurrent(i => (i + 1) % images.length), [images.length])
 
+  const scrollbarColor = isDark ? '#333333' : '#c0c0c0'
+  const scrollbarTrack = isDark ? '#1a1a1a' : '#e8e8e8'
+
   useEffect(() => {
     const onKey = e => {
       if (e.key === 'ArrowLeft') prev()
@@ -68,7 +71,13 @@ function DetailCarousel({ images, isDark, cardBorder, textMuted }) {
           </>
         )}
       </div>
-      <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
+      <style>{`
+        .carousel-thumbs::-webkit-scrollbar { height: 4px; }
+        .carousel-thumbs::-webkit-scrollbar-track { background: ${scrollbarTrack}; border-radius: 2px; }
+        .carousel-thumbs::-webkit-scrollbar-thumb { background: ${scrollbarColor}; border-radius: 2px; }
+        .carousel-thumbs { scrollbar-width: thin; scrollbar-color: ${scrollbarColor} ${scrollbarTrack}; }
+      `}</style>
+      <div className="carousel-thumbs flex gap-2 mt-3 overflow-x-auto pb-1">
         {images.map((src, i) => (
           <button key={i} onClick={() => setCurrent(i)} className="flex-shrink-0 w-16 h-10 rounded-md overflow-hidden transition-all duration-200" style={{ border: i === current ? '2px solid #fff' : `1px solid ${cardBorder}`, opacity: i === current ? 1 : 0.5, padding: 0, cursor: 'pointer', background: isDark ? '#1a1a1a' : '#e0e0e0' }}
             onMouseEnter={e => { if (i !== current) e.currentTarget.style.opacity = '0.75' }}
@@ -82,10 +91,15 @@ function DetailCarousel({ images, isDark, cardBorder, textMuted }) {
   )
 }
 
-function ProjectPage({ isDark, onBack, initialIndex = 0 }) {
+function ProjectPage({ isDark, onBack, onThemeToggle, initialIndex = 0 }) {
   const [selectedIndex, setSelectedIndex] = useState(initialIndex)
   const project = PROJECTS[selectedIndex]
   const wheelRef = useRef(null)
+  const scrollRef = useRef(null)
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0, behavior: 'instant' })
+  }, [selectedIndex])
 
   const swipeRef = useRef({ x: 0 })
 
@@ -106,7 +120,7 @@ function ProjectPage({ isDark, onBack, initialIndex = 0 }) {
   const textMuted     = isDark ? 'rgba(255,255,255,0.38)' : 'rgba(0,0,0,0.38)'
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-y-auto" style={{ background: isDark ? '#111111' : '#f5f5f5' }}
+    <div ref={scrollRef} className="fixed inset-0 z-[100] overflow-y-auto" style={{ background: isDark ? '#111111' : '#f5f5f5' }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -133,8 +147,8 @@ function ProjectPage({ isDark, onBack, initialIndex = 0 }) {
             className="h-full w-full"
             items={WHEEL_ITEMS}
             defaultSelected={selectedIndex}
-            textColor="#a6a6a6"
-            activeColor="#ffffff"
+            textColor={isDark ? '#a6a6a6' : '#666666'}
+            activeColor={textPrimary}
             side="up"
             fontSize={2}
             spacing={10}
@@ -152,27 +166,89 @@ function ProjectPage({ isDark, onBack, initialIndex = 0 }) {
           />
         </div>
 
-        <div className="hidden lg:flex lg:fixed lg:left-0 lg:top-0 lg:bottom-0 lg:w-[500px] lg:z-20 flex-col" style={{ background: isDark ? '#111111' : '#f5f5f5' }}>
+        {onThemeToggle && (
           <button
-            onClick={onBack}
-            className="flex items-center gap-2 font-mono text-xs tracking-widest uppercase no-underline transition-all duration-300 px-8 pt-8 pb-4"
-            style={{ color: textSecondary, background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
-            onMouseEnter={e => e.currentTarget.style.color = textPrimary}
-            onMouseLeave={e => e.currentTarget.style.color = textSecondary}
+            onClick={onThemeToggle}
+            className="lg:hidden fixed z-40 flex items-center justify-center rounded-full transition-all duration-300"
+            style={{
+              bottom: '136px',
+              left: '24px',
+              width: '44px',
+              height: '44px',
+              background: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
+              border: `1px solid ${cardBorder}`,
+              color: textPrimary,
+              touchAction: 'manipulation',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.14)'}
+            onMouseLeave={e => e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}
+            onTouchStart={e => e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.14)'}
+            onTouchEnd={e => e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}
+            aria-label="Toggle theme"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12"/>
-              <polyline points="12 19 5 12 12 5"/>
-            </svg>
-            Back
+            {isDark ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+            )}
           </button>
+        )}
+
+        <div className="hidden lg:flex lg:fixed lg:left-0 lg:top-0 lg:bottom-0 lg:w-[500px] lg:z-20 flex-col" style={{ background: isDark ? '#111111' : '#f5f5f5' }}>
+          <div className="flex items-center justify-between px-8 pt-8 pb-4">
+            <button
+              onClick={onBack}
+              className="flex items-center gap-2 font-mono text-xs tracking-widest uppercase no-underline transition-all duration-300"
+              style={{ color: textSecondary, background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+              onMouseEnter={e => e.currentTarget.style.color = textPrimary}
+              onMouseLeave={e => e.currentTarget.style.color = textSecondary}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/>
+                <polyline points="12 19 5 12 12 5"/>
+              </svg>
+              Back
+            </button>
+            {onThemeToggle && (
+              <button
+                onClick={onThemeToggle}
+                className="flex items-center justify-center rounded-full transition-all duration-300"
+                style={{ width: '36px', height: '36px', background: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)', border: `1px solid ${cardBorder}`, color: textPrimary, touchAction: 'manipulation' }}
+                onMouseEnter={e => e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.14)'}
+                onMouseLeave={e => e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}
+                aria-label="Toggle theme"
+              >
+                {isDark ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                  </svg>
+                )}
+              </button>
+            )}
+          </div>
           <div className="flex-1 min-h-0">
             <OptionWheel
               className="h-full w-full"
               items={WHEEL_ITEMS}
               defaultSelected={selectedIndex}
-              textColor="#a6a6a6"
-              activeColor="#ffffff"
+              textColor={isDark ? '#a6a6a6' : '#666666'}
+              activeColor={textPrimary}
               side="left"
               fontSize={3}
               spacing={1.4}
@@ -281,15 +357,46 @@ function ProjectPage({ isDark, onBack, initialIndex = 0 }) {
           <div className="w-full h-px mb-8" style={{ background: cardBorder }} />
 
           <div>
-            <span className="font-mono text-[10px] tracking-widest uppercase block mb-3" style={{ color: textMuted }}>Demo Video</span>
-            <div className="w-full rounded-xl flex items-center justify-center" style={{ aspectRatio: '16 / 9', border: `1px solid ${cardBorder}`, background: isDark ? '#1a1a1a' : '#ffffff' }}>
-              <div className="flex flex-col items-center gap-2">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={textMuted} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="5 3 19 12 5 21 5 3"/>
-                </svg>
-                <span className="font-mono text-xs" style={{ color: textMuted }}>Demo video coming soon</span>
-              </div>
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: textMuted }}>Demo Video</span>
+              {project.videoUrl && (
+                <span className="font-mono text-[9px] tracking-widest uppercase px-2 py-0.5 rounded-full" style={{ color: isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)', border: `1px solid ${cardBorder}`, background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)' }}>
+                  Watch
+                </span>
+              )}
             </div>
+            {project.videoUrl ? (
+              <div className="group relative w-full rounded-xl overflow-hidden" style={{ aspectRatio: '16 / 9', border: `1px solid ${cardBorder}`, background: isDark ? '#1a1a1a' : '#ffffff', boxShadow: isDark ? '0 8px 40px rgba(0,0,0,0.4)' : '0 8px 40px rgba(0,0,0,0.08)' }}>
+                <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-md" style={{ background: 'rgba(0,0,0,0.55)', border: '2px solid rgba(255,255,255,0.25)' }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+                      <polygon points="8 5 19 12 8 19 8 5"/>
+                    </svg>
+                  </div>
+                </div>
+                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <iframe
+                  src={project.videoUrl}
+                  className="w-full h-full relative z-0"
+                  style={{ border: 'none' }}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title={`${project.title} demo video`}
+                />
+              </div>
+            ) : (
+              <div className="group relative w-full rounded-xl flex items-center justify-center overflow-hidden" style={{ aspectRatio: '16 / 9', border: `1px solid ${cardBorder}`, background: isDark ? '#1a1a1a' : '#ffffff' }}>
+                <div className="absolute inset-0 opacity-[0.03]" style={{ background: `radial-gradient(circle at 50% 50%, ${textPrimary} 0%, transparent 70%)` }} />
+                <div className="flex flex-col items-center gap-3 relative z-10">
+                  <div className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110" style={{ background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)', border: `1px solid ${cardBorder}` }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={textMuted} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                  </div>
+                  <span className="font-mono text-xs" style={{ color: textMuted }}>Demo video coming soon</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

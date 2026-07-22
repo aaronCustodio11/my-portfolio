@@ -136,6 +136,7 @@ const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
         isDark={isDark}
         initialIndex={selectedProject}
         onBack={() => setSelectedProject(null)}
+        onThemeToggle={() => setIsDark(d => !d)}
       />
     )}
     <div
