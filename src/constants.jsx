@@ -1,8 +1,7 @@
-import React from 'react'
 const imgs = import.meta.glob('./assets/Images/**/*.{png,jpg,jpeg}', { eager: true, query: '?url', import: 'default' })
 const img = (path) => imgs[`./assets/Images/${path}`]
 
-const GlobeIcon = (color) => (
+const globeIcon = (color) => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/>
     <line x1="2" y1="12" x2="22" y2="12"/>
@@ -10,7 +9,7 @@ const GlobeIcon = (color) => (
   </svg>
 )
 
-const GamepadIcon = (color) => (
+const gamepadIcon = (color) => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <line x1="6" y1="12" x2="10" y2="12"/>
     <line x1="8" y1="10" x2="8" y2="14"/>
@@ -20,23 +19,14 @@ const GamepadIcon = (color) => (
   </svg>
 )
 
-const DeviceIcon = (color) => (
+const deviceIcon = (color) => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
     <line x1="12" y1="18" x2="12.01" y2="18"/>
   </svg>
 )
 
-const ControllerIcon = (color) => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
-    <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
-    <line x1="6" y1="6" x2="6.01" y2="6"/>
-    <line x1="6" y1="18" x2="6.01" y2="18"/>
-  </svg>
-)
-
-const CODEIcon = (color) => (
+const codeIcon = (color) => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="16 18 22 12 16 6"/>
     <polyline points="8 6 2 12 8 18"/>
@@ -44,10 +34,10 @@ const CODEIcon = (color) => (
 )
 
 const projectIcons = {
-  web: GlobeIcon,
-  game: GamepadIcon,
-  mobile: DeviceIcon,
-  code: CODEIcon,
+  web: globeIcon,
+  game: gamepadIcon,
+  mobile: deviceIcon,
+  code: codeIcon,
 }
 
 export function getProjectIcon(type) {

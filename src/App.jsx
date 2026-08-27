@@ -36,8 +36,7 @@ function App() {
 
   const [rotatingIndex, setRotatingIndex] = useState(0)
   const [hoveredCert, setHoveredCert] = useState(null)
-const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [showSkillsList, setShowSkillsList] = useState(false)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [hoveredFolder, setHoveredFolder] = useState(null)
 
   const menuItems = navItems.map(item => ({
@@ -45,12 +44,6 @@ const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
     ariaLabel: `Go to ${item.label}`,
     link: item.href,
   }))
-
-  const socialItems = [
-    { label: 'GitHub', link: 'https://github.com/aaroncustodio' },
-    { label: 'LinkedIn', link: 'https://linkedin.com/in/aaroncustodio' },
-    { label: 'Email', link: 'mailto:aaronmanuelcustodio11@gmail.com' },
-  ]
 
   const [cardSize, setCardSize] = useState(() => {
     const w = typeof window !== 'undefined' ? window.innerWidth : 768
