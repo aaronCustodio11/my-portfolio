@@ -285,11 +285,23 @@ function App() {
                   coneSpread={25} animated={false}
                   colors={isDark ? ['#ffffff', '#aaaaaa', '#555555'] : ['#000000', '#444444', '#888888']}
                 >
-                  <a
-                    href={resume}
-                    download="Resume_Aaron_Custodio.pdf"
+                  <button
+                    onClick={() => {
+                      fetch(resume)
+                        .then(res => res.blob())
+                        .then(blob => {
+                          const url = URL.createObjectURL(blob)
+                          const a = document.createElement('a')
+                          a.href = url
+                          a.download = 'Resume_Aaron_Custodio.pdf'
+                          document.body.appendChild(a)
+                          a.click()
+                          document.body.removeChild(a)
+                          URL.revokeObjectURL(url)
+                        })
+                    }}
                     className="flex items-center gap-2 px-5 py-2.5 font-mono text-xs sm:text-sm tracking-widest uppercase no-underline"
-                    style={{ color: textPrimary, transition: 'color 0.4s ease', whiteSpace: 'nowrap' }}
+                    style={{ color: textPrimary, transition: 'color 0.4s ease', whiteSpace: 'nowrap', background: 'none', border: 'none', cursor: 'pointer' }}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -297,7 +309,7 @@ function App() {
                       <line x1="12" y1="15" x2="12" y2="3"/>
                     </svg>
                     Get my Resume
-                  </a>
+                  </button>
                 </BorderGlow>
               </div>
 
