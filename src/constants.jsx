@@ -68,9 +68,10 @@ export const PROJECTS = [
     contributions: [
       'Spearheaded project planning and task delegation for a 4-member team across 3 semesters using Agile methodology, ensuring timely delivery of all project milestones. ',
       'Developed 4 core modules (Appointment Request, Mood Tracker, User Management, and Form Analytics) for a counseling system serving 100 students, 2 counselors, and 1 admin, achieving a 3.77 out of 5 ISO 25010 quality rating across all user groups. ',
+      'Engineered an NLP-driven conversational assistant to replace the platforms rule-based chatbot delivering natural English, Tagalog, and Taglish conversation with retrieval-grounded responses and a crisis-safety detection layer, eliminating the rigid keyword-matching limitations of the legacy system. ',
       'Represented the IT department at the CEIT Research Colloquium, competing against 8 other teams from CE, EE, and IT departments, and earned 3rd Place Best Presentation. ',
     ],
-    tags: ['Flutter', 'Dart', 'Firebase'],
+    tags: ['Flutter', 'Dart', 'Firebase', 'Supabase', 'Groq', ],
     link: '#',
     icon: getProjectIcon('Web Development & Mobile App'),
     image: img('works/Rumini/rumini3.png'),
@@ -144,16 +145,18 @@ export const PROJECTS = [
   },
 ]
 
-export const ABOUT_SUMMARY = `As a graduating Bachelor of Science in Information Technology student, currently completing my degree and preparing for my transition into the professional field, I am eager to begin my career in a role that aligns with my passion for software development and my technical expertise. I am actively seeking an opportunity where I can contribute my skills while continuing to learn and grow alongside experienced professionals.
+export const ABOUT_SUMMARY = `I'm Aaron, a fresh Information Technology graduate from Pamantasan ng Lungsod ng Valenzuela. I've always been drawn to building things, whether that's a website, a mobile game, or an AI system, and over the last few years I've learned that I enjoy leading a team just as much as writing the code.
 
-I have always enjoyed building applications, games, and software because I find fulfillment in turning ideas into functional solutions that create real value. Seeing a project progress from planning and development to a finished product motivates me to continuously improve my skills and explore new technologies. I enjoy collaborating with a team, solving problems, and contributing to projects that make a meaningful impact on both the organization and its users.
+My biggest project was our capstone, Rumini 2.0, where I served as project manager and technical lead. We replaced a rigid, keyword-based chatbot with an NLP-driven assistant that can hold natural conversations in English, Tagalog, and Taglish, and even detect crisis situations. Presenting it at the CEIT Research Colloquium and earning 3rd Place Best Presentation was a proud moment for me and my team.
 
-My goal is to become a well-rounded software developer who not only writes quality code but also understands the bigger picture of creating successful products. As I gain experience, I aspire to grow into a Project Manager role where I can combine my technical knowledge, leadership skills, and passion for delivering innovative solutions. I am committed to contributing to the success of the company I join while continuously challenging myself to learn, improve, and take on greater responsibilities.`
+Outside of that, I've led a game project that won the People's Choice Award at GameCon, designed and built a web system as front-end lead, and developed an Android RPG game for a client. I also did an IT support internship at People Partners Inc., where I got hands-on experience keeping a workplace running smoothly.
+
+Now I'm looking for a role where I can keep growing, whether in software development, quality assurance, or project management, and where I can bring both my technical skills and my teamwork to real-world problems.`
 
 export const ABOUT_FACTS = [
   { label: 'Location',  value: 'Valenzuela City, Philippines' },
   { label: 'Degree',    value: 'BS Information Technology' },
-  { label: 'Specialization',     value: 'Project Management & Software Development' },
+  { label: 'Specialization',     value: 'Software Engineer and AI Specialist' },
   { label: 'Status',    value: 'Open for Opportunities' },
 ]
 
@@ -163,42 +166,77 @@ export const EDUCATION = {
   degree: 'Bachelor of Science in Information Technology',
   address: 'Tongco St. Maysan, Valenzuela City',
   period: '2022 – 2026',
-  note: 'Graduating Aug 2026',
+  note: 'Graduated Aug 2026',
   imageLight: img('plvlight.jpg'),
   imageDark: img('plvnight.png'),
 }
 
+const folderSvg = (svg) => `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${svg}</svg>`)}`
+
+const editorIcon = folderSvg('<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m9 11-2 2 2 2"/><path d="m15 11 2 2-2 2"/>')
+
 export const SKILL_LOGOS = [
-  { src: 'https://cdn.simpleicons.org/figma', alt: 'Figma' },
-  { src: 'https://cdn.simpleicons.org/mysql', alt: 'MySQL' },
-  { src: 'https://cdn.simpleicons.org/firebase', alt: 'Firebase' },
-  { src: 'https://cdn.simpleicons.org/flutter', alt: 'Flutter' },
+  { src: 'https://cdn.simpleicons.org/python', alt: 'Python' },
+  { src: img('icons/java.png'), alt: 'Java' },
+  { src: img('icons/c-sharp.png'), alt: 'C#' },
+  { src: 'https://cdn.simpleicons.org/javascript', alt: 'JavaScript' },
+  { src: 'https://cdn.simpleicons.org/typescript', alt: 'TypeScript' },
+  { src: 'https://cdn.simpleicons.org/php', alt: 'PHP' },
   { src: 'https://cdn.simpleicons.org/dart', alt: 'Dart' },
   { src: 'https://cdn.simpleicons.org/html5', alt: 'HTML' },
   { src: 'https://cdn.simpleicons.org/css', alt: 'CSS' },
-  { src: 'https://cdn.simpleicons.org/javascript', alt: 'JavaScript' },
-  { src: 'https://cdn.simpleicons.org/php', alt: 'PHP' },
   { src: 'https://cdn.simpleicons.org/react', alt: 'React' },
   { src: 'https://cdn.simpleicons.org/vite', alt: 'Vite' },
+  { src: 'https://cdn.simpleicons.org/flutter', alt: 'Flutter' },
+  { src: 'https://cdn.simpleicons.org/expo', alt: 'Expo' },
+  { src: 'https://cdn.simpleicons.org/openapiinitiative', alt: 'REST API' },
+  { src: 'https://cdn.simpleicons.org/flask', alt: 'Flask' },
+  { src: 'https://cdn.simpleicons.org/mysql', alt: 'MySQL' },
+  { src: 'https://cdn.simpleicons.org/firebase', alt: 'Firebase' },
   { src: 'https://cdn.simpleicons.org/supabase', alt: 'Supabase' },
+  { src: 'https://cdn.simpleicons.org/n8n', alt: 'n8n' },
+  { src: 'https://cdn.simpleicons.org/docker', alt: 'Docker' },
+  { src: 'https://cdn.simpleicons.org/figma', alt: 'Figma' },
   { src: 'https://cdn.simpleicons.org/unity', alt: 'Unity' },
-  { src: 'https://cdn.simpleicons.org/blender', alt: 'Blender' },
-  { src: img('icons/c-sharp.png'), alt: 'C#' },
-  { src: img('icons/java.png'), alt: 'Java' },
-  { src: 'https://cdn.simpleicons.org/jira', alt: 'Jira' },
+  { src: 'https://cdn.simpleicons.org/aseprite', alt: 'Aseprite' },
+  { src: 'https://cdn.simpleicons.org/git', alt: 'Git' },
+  { src: 'https://cdn.simpleicons.org/github', alt: 'GitHub' },
+  { src: editorIcon, alt: 'VS Code' },
 ]
-
-const folderSvg = (svg) => `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${svg}</svg>`)}`
 
 export const SKILL_CATEGORIES = [
   {
-    category: 'UI/UX Prototyping',
-    color: '#F24E1E',
-    folderLogo: folderSvg('<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'),
-    skills: [{ name: 'Figma', logo: 'https://cdn.simpleicons.org/figma' }],
+    category: 'Languages',
+    color: '#239120',
+    folderLogo: folderSvg('<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>'),
+    skills: [
+      { name: 'Python', logo: 'https://cdn.simpleicons.org/python' },
+      { name: 'Java', logo: img('icons/java.png') },
+      { name: 'C#', logo: img('icons/c-sharp.png') },
+      { name: 'JavaScript', logo: 'https://cdn.simpleicons.org/javascript' },
+      { name: 'TypeScript', logo: 'https://cdn.simpleicons.org/typescript' },
+      { name: 'PHP', logo: 'https://cdn.simpleicons.org/php' },
+      { name: 'Dart', logo: 'https://cdn.simpleicons.org/dart' },
+    ],
   },
   {
-    category: 'Database Skills',
+    category: 'Web/Mobile',
+    color: '#02569B',
+    folderLogo: folderSvg('<rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="18" r="1.5"/><rect x="7" y="4" width="10" height="12" rx="1"/>'),
+    skills: [
+      { name: 'HTML', logo: 'https://cdn.simpleicons.org/html5' },
+      { name: 'CSS', logo: 'https://cdn.simpleicons.org/css' },
+      { name: 'React.js', logo: 'https://cdn.simpleicons.org/react' },
+      { name: 'Vite', logo: 'https://cdn.simpleicons.org/vite' },
+      { name: 'Flutter', logo: 'https://cdn.simpleicons.org/flutter' },
+      { name: 'React Native', logo: 'https://cdn.simpleicons.org/react' },
+      { name: 'Expo', logo: 'https://cdn.simpleicons.org/expo' },
+      { name: 'REST API', logo: 'https://cdn.simpleicons.org/openapiinitiative' },
+      { name: 'Flask', logo: 'https://cdn.simpleicons.org/flask' },
+    ],
+  },
+  {
+    category: 'Database/Backend',
     color: '#4479A1',
     folderLogo: folderSvg('<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 5v4c0 1.66 4 3 9 3s9-1.34 9-3V5"/>'),
     skills: [
@@ -208,97 +246,108 @@ export const SKILL_CATEGORIES = [
     ],
   },
   {
-    category: 'Application Development',
-    color: '#02569B',
-    folderLogo: folderSvg('<rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="18" r="1.5"/><rect x="7" y="4" width="10" height="12" rx="1"/>'),
+    category: 'Automation',
+    color: '#2496ED',
+    folderLogo: folderSvg('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'),
     skills: [
-      { name: 'Flutter', logo: 'https://cdn.simpleicons.org/flutter' },
-      { name: 'Dart', logo: 'https://cdn.simpleicons.org/dart' },
-      { name: 'React', logo: 'https://cdn.simpleicons.org/react' },
-      { name: 'Vite', logo: 'https://cdn.simpleicons.org/vite' },
+      { name: 'n8n', logo: 'https://cdn.simpleicons.org/n8n' },
+      { name: 'Docker', logo: 'https://cdn.simpleicons.org/docker' },
     ],
   },
   {
-    category: 'Web Development',
-    color: '#E34F26',
-    folderLogo: folderSvg('<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'),
-    skills: [
-      { name: 'HTML', logo: 'https://cdn.simpleicons.org/html5' },
-      { name: 'CSS', logo: 'https://cdn.simpleicons.org/css' },
-      { name: 'JavaScript', logo: 'https://cdn.simpleicons.org/javascript' },
-      { name: 'PHP', logo: 'https://cdn.simpleicons.org/php' },
-    ],
-  },
-  {
-    category: 'Game Development',
+    category: 'Design/Game',
     color: '#6C5CE7',
     folderLogo: folderSvg('<rect x="2" y="6" width="20" height="12" rx="3"/><circle cx="6" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/><path d="M9 10h2v2H9z"/><path d="M13 10h2v2h-2z"/>'),
-    skills: [{ name: 'Unity', logo: 'https://cdn.simpleicons.org/unity' }],
-  },
-  {
-    category: 'Basic 3D Modeling',
-    color: '#EA7600',
-    folderLogo: folderSvg('<polyline points="21 16 12 21 3 16 3 8 12 3 21 8 21 16"/><line x1="12" y1="21" x2="12" y2="8"/><line x1="3" y1="8" x2="21" y2="8"/>'),
-    skills: [{ name: 'Blender', logo: 'https://cdn.simpleicons.org/blender' }],
-  },
-  {
-    category: 'Programming Languages',
-    color: '#239120',
-    folderLogo: folderSvg('<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>'),
     skills: [
-      { name: 'C#', logo: img('icons/c-sharp.png') },
-      { name: 'Java', logo: img('icons/java.png') },
+      { name: 'Figma', logo: 'https://cdn.simpleicons.org/figma' },
+      { name: 'Unity', logo: 'https://cdn.simpleicons.org/unity' },
+      { name: 'Aseprite', logo: 'https://cdn.simpleicons.org/aseprite' },
     ],
   },
   {
-    category: 'Project Management',
-    color: '#0052CC',
-    folderLogo: folderSvg('<rect x="3" y="3" width="18" height="4" rx="1"/><rect x="3" y="10" width="14" height="4" rx="1"/><rect x="3" y="17" width="10" height="4" rx="1"/>'),
+    category: 'Tools',
+    color: '#607D8B',
+    folderLogo: folderSvg('<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'),
     skills: [
-      { name: 'Jira', logo: 'https://cdn.simpleicons.org/jira' },
+      { name: 'Git', logo: 'https://cdn.simpleicons.org/git' },
+      { name: 'GitHub', logo: 'https://cdn.simpleicons.org/github' },
+      { name: 'VS Code', logo: editorIcon },
     ],
   },
 ]
 
 export const CERTIFICATIONS = [
   {
-    name: "Dean's Lister",
-    detail: '2nd Year, 2nd Semester',
-    category: 'Academic Honor',
-    year: '2023',
-    gwa: '1.45 GWA',
-    image: img('Certificates/DL2ndYear.png'),
+    name: 'Developing AI Applications with Python and Flask',
+    detail: 'IBM · Coursera',
+    category: 'Course Certificate',
+    year: '2026',
+    issued: 'Sep 25, 2026',
+    url: 'https://www.coursera.org/account/accomplishments/records/0D3JFYW9CQ1G',
+    image: img('Certificates/Coursera 0D3JFYW9CQ1G_page-0001.jpg'),
   },
   {
-    name: "Dean's Lister",
-    detail: '3rd Year, 1st Semester',
-    category: 'Academic Honor',
-    year: '2024',
-    gwa: '1.15 GWA',
-    image: img('Certificates/DL3rdYear.png'),
+    name: 'Python for Data Science, AI & Development',
+    detail: 'IBM · Coursera',
+    category: 'Course Certificate',
+    year: '2026',
+    issued: 'Sep 23, 2026',
+    url: 'https://www.coursera.org/account/accomplishments/records/RUK82L31P44L',
+    image: img('Certificates/Coursera RUK82L31P44L_page-0001.jpg'),
   },
   {
-    name: "Dean's Lister",
-    detail: '3rd Year, 2nd Semester',
-    category: 'Academic Honor',
-    year: '2024',
-    gwa: '1.13 GWA',
-    image: 'https://placehold.co/260x140/111111/333333?text=Dean%27s+List',
+    name: 'Generative AI: Prompt Engineering Basics',
+    detail: 'IBM · Coursera',
+    category: 'Course Certificate',
+    year: '2026',
+    issued: 'Sep 15, 2026',
+    url: 'https://www.coursera.org/account/accomplishments/records/RRQJ63RMKPB6',
+    image: img('Certificates/Coursera RRQJ63RMKPB6_page-0001.jpg'),
   },
   {
-    name: 'OWWA – Education for Development Scholarships Program (EDSP)',
-    detail: '3rd Year 1st Sem – 4th Year Last Sem',
-    category: 'Scholarship',
-    year: '2024',
-    image: 'https://placehold.co/260x140/111111/333333?text=OWWA+EDSP',
+    name: 'Generative AI: Introduction and Applications',
+    detail: 'IBM · Coursera',
+    category: 'Course Certificate',
+    year: '2026',
+    issued: 'Sep 12, 2026',
+    url: 'https://www.coursera.org/account/accomplishments/records/GUL20SH34784',
+    image: img('Certificates/Coursera GUL20SH34784_page-0001.jpg'),
   },
   {
-    name: "Dean's Lister",
-    detail: '4th Year, 1st Semester',
-    category: 'Academic Honor',
-    year: '2025',
-    gwa: '1.27 GWA',
-    image: 'https://placehold.co/260x140/111111/333333?text=Dean%27s+List',
+    name: 'Introduction to Artificial Intelligence (AI)',
+    detail: 'IBM · Coursera',
+    category: 'Course Certificate',
+    year: '2026',
+    issued: 'Sep 10, 2026',
+    url: 'https://www.coursera.org/account/accomplishments/records/2PUR5FP6JGEJ',
+    image: img('Certificates/Coursera 2PUR5FP6JGEJ_page-0001.jpg'),
+  },
+  {
+    name: 'Foundations of Project Management',
+    detail: 'Google · Coursera',
+    category: 'Course Certificate',
+    year: '2026',
+    issued: 'Sep 9, 2026',
+    url: 'https://www.coursera.org/account/accomplishments/records/0Q3X7P19QW36',
+    image: img('Certificates/Coursera 0Q3X7P19QW36_page-0001.jpg'),
+  },
+  {
+    name: 'Prompt Like an Engineer',
+    detail: 'Cisco Networking Academy',
+    category: 'Course Certificate',
+    year: '2026',
+    issued: 'Sep 6, 2026',
+    url: 'https://www.credly.com/badges/d290209e-7d80-427a-9da6-5db95438c9c4/public_url',
+    image: img('Certificates/PromptLikeanEngineer20260906-21-3a7xod_page-0001.jpg'),
+  },
+  {
+    name: 'Introduction to Modern AI',
+    detail: 'Cisco Networking Academy',
+    category: 'Course Certificate',
+    year: '2026',
+    issued: 'Aug 29, 2026',
+    url: 'https://www.credly.com/badges/bcb910ce-734c-436b-af73-a86adc883800/public_url',
+    image: img('Certificates/IntrotoModernAIUpdate20260829-22-x0kpo_page-0001.jpg'),
   },
   {
     name: '3rd Place – Web Design Competition',
@@ -320,5 +369,21 @@ export const CERTIFICATIONS = [
     category: 'Award',
     year: '2026',
     image: img('Certificates/Colloquium.jpg'),
+  },
+  {
+    name: "Dean's Lister",
+    detail: '3rd Year, 1st Semester',
+    category: 'Academic Honor',
+    year: '2024',
+    gwa: '1.15 GWA',
+    image: img('Certificates/DL3rdYear.png'),
+  },
+  {
+    name: "Dean's Lister",
+    detail: '2nd Year, 2nd Semester',
+    category: 'Academic Honor',
+    year: '2023',
+    gwa: '1.45 GWA',
+    image: img('Certificates/DL2ndYear.png'),
   },
 ]

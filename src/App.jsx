@@ -15,12 +15,19 @@ import aaron1Dark from './assets/Images/aaron1.png'
 import aaron1Light from './assets/Images/aaron1Shades.png'
 import logo from './assets/Images/logo.png'
 import VariableProximity from './components/VariableProximity'
-import CertPreview from './components/CertPreview'
+import FlexCarousel from './components/FlexCarousel'
 import LogoLoop from './components/LogoLoop'
 import MetaBalls from './components/MetaBalls'
 import StaggeredMenu from './components/StaggeredMenu'
 import Folder from './components/Folder'
 import { navItems, SUMMARY, PROJECTS, ABOUT_SUMMARY, ABOUT_FACTS, EDUCATION, CERTIFICATIONS, SKILL_LOGOS, SKILL_CATEGORIES } from './constants.jsx'
+
+const CERT_CATEGORY_COLORS = {
+  Award: { bg: 'rgba(234,179,8,0.12)', border: 'rgba(234,179,8,0.35)', text: '#eab308' },
+  'Academic Honor': { bg: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.35)', text: '#3b82f6' },
+  Scholarship: { bg: 'rgba(34,197,94,0.12)', border: 'rgba(34,197,94,0.35)', text: '#22c55e' },
+  'Course Certificate': { bg: 'rgba(168,85,247,0.12)', border: 'rgba(168,85,247,0.35)', text: '#a855f7' },
+}
 
 
 function App() {
@@ -35,8 +42,7 @@ function App() {
   const skillsTitleRef = useRef(null)
 
   const [rotatingIndex, setRotatingIndex] = useState(0)
-  const [hoveredCert, setHoveredCert] = useState(null)
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [activeCert, setActiveCert] = useState(0)
   const [hoveredFolder, setHoveredFolder] = useState(null)
 
   const menuItems = navItems.map(item => ({
@@ -44,6 +50,16 @@ function App() {
     ariaLabel: `Go to ${item.label}`,
     link: item.href,
   }))
+
+  const certItems = CERTIFICATIONS.map(cert => ({
+    src: cert.image,
+    alt: cert.name,
+    title: cert.name,
+    subtitle: cert.detail,
+  }))
+  const currentCert = CERTIFICATIONS[activeCert] || CERTIFICATIONS[0]
+  const currentCertColor =
+    CERT_CATEGORY_COLORS[currentCert.category] ?? CERT_CATEGORY_COLORS.Award
 
   const [cardSize, setCardSize] = useState(() => {
     const w = typeof window !== 'undefined' ? window.innerWidth : 768
@@ -800,13 +816,18 @@ function App() {
                   </span>
                 </div>
 
-                <ScrambledText
-                  radius={80} duration={1} speed={0.5} scrambleChars=".:"
-                  className="font-mono text-sm leading-relaxed"
-                  style={{ color: textSecondary, transition: 'color 0.4s ease' }}
-                >
-                  {ABOUT_SUMMARY}
-                </ScrambledText>
+                <div className="flex flex-col gap-4">
+                  {ABOUT_SUMMARY.split('\n\n').map(paragraph => (
+                    <ScrambledText
+                      key={paragraph}
+                      radius={80} duration={1} speed={0.5} scrambleChars=".:"
+                      className="font-mono text-sm leading-relaxed"
+                      style={{ color: textSecondary, transition: 'color 0.4s ease' }}
+                    >
+                      {paragraph}
+                    </ScrambledText>
+                  ))}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -850,9 +871,9 @@ function App() {
             </div>
 
            {/* Education + Certifications */}
-<div className="grid grid-cols-1 xl:grid-cols-2 gap-10 col-span-1 lg:col-span-2">
+<div className="flex flex-col gap-10 col-span-1 lg:col-span-2">
 
-  {/* ===================== LEFT : EDUCATION ===================== */}
+  {/* ===================== EDUCATION (top) ===================== */}
   <div className="flex flex-col gap-4 items-center">
 
     {/* Education */}
@@ -1009,7 +1030,7 @@ maxWidth: '700px' }}
 
   </div>
 
-  {/* ===================== RIGHT : CERTIFICATIONS ===================== */}
+  {/* ===================== CERTIFICATIONS (bottom) ===================== */}
   <div className="flex flex-col gap-4">
 
     {/* Certifications */}
@@ -1038,139 +1059,133 @@ maxWidth: '700px' }}
 
     <div className="w-full h-px" style={{ background: cardBorder }} />
 
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-      {[...CERTIFICATIONS].sort((a, b) => Number(b.year) - Number(a.year)).map((cert, i) => {
-        const categoryColor = {
-          Award: { bg: 'rgba(234,179,8,0.12)', border: 'rgba(234,179,8,0.35)', text: '#eab308' },
-          'Academic Honor': { bg: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.35)', text: '#3b82f6' },
-          Scholarship: { bg: 'rgba(34,197,94,0.12)', border: 'rgba(34,197,94,0.35)', text: '#22c55e' },
-        }
-        const cat = categoryColor[cert.category] ?? categoryColor['Award']
-
-        return (
-                    <div
-  key={i}
-  className="relative flex flex-col gap-1.5 p-3 rounded-xl overflow-hidden"
-  style={{
-    background: tagBg,
-    border: `1px solid ${cardBorder}`,
-    transition:
-      'border-color 0.25s ease, transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease',
-    cursor: 'pointer',
-    touchAction: 'manipulation',
-  }}
-  onMouseEnter={e => {
-    e.currentTarget.style.borderColor = cat.border
-    e.currentTarget.style.transform = 'translateY(-2px) scale(1.04)'
-    e.currentTarget.style.background = isDark
-      ? 'rgba(255,255,255,0.07)'
-      : 'rgba(0,0,0,0.05)'
-    e.currentTarget.style.boxShadow =
-      `0 8px 24px rgba(0,0,0,0.2), 0 0 0 1px ${cat.border}`
-    setHoveredCert(cert)
-  }}
-  onMouseMove={e =>
-    setMousePos({
-      x: e.clientX,
-      y: e.clientY,
-    })
-  }
-  onMouseLeave={e => {
-    e.currentTarget.style.borderColor = cardBorder
-    e.currentTarget.style.transform = 'translateY(0) scale(1)'
-    e.currentTarget.style.background = tagBg
-    e.currentTarget.style.boxShadow = 'none'
-    setHoveredCert(null)
-  }}
-  onTouchStart={e => {
-    e.currentTarget.style.borderColor = cat.border
-    e.currentTarget.style.transform = 'translateY(-2px) scale(1.04)'
-    e.currentTarget.style.background = isDark
-      ? 'rgba(255,255,255,0.07)'
-      : 'rgba(0,0,0,0.05)'
-    e.currentTarget.style.boxShadow =
-      `0 8px 24px rgba(0,0,0,0.2), 0 0 0 1px ${cat.border}`
-    setHoveredCert(cert)
-  }}
-  onTouchMove={e =>
-    setMousePos({
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-    })
-  }
-  onTouchEnd={e => {
-    e.currentTarget.style.borderColor = cardBorder
-    e.currentTarget.style.transform = 'translateY(0) scale(1)'
-    e.currentTarget.style.background = tagBg
-    e.currentTarget.style.boxShadow = 'none'
-    setHoveredCert(null)
-  }}
->
-  {/* Subtle left accent bar */}
-  <div
-    className="absolute left-0 top-0 bottom-0 w-0.5 rounded-full"
-    style={{ background: cat.border }}
-  />
-
-  {/* Top row: category tag + GWA */}
-  <div className="flex items-center justify-between gap-2">
-    <span
-      className="font-mono text-xs px-2.5 py-0.5 rounded-full font-medium"
+    <div
+      className="font-mono"
       style={{
-        background: cat.bg,
-        border: `1px solid ${cat.border}`,
-        color: cat.text,
+        width: '100%',
+        height: 'clamp(360px, 62vw, 560px)',
+        position: 'relative',
       }}
     >
-      {cert.category}
-    </span>
+      <FlexCarousel
+        items={certItems}
+        preset="liquid"
+        intro="rise"
+        cardHeight={0.5}
+        gap={12}
+        squeeze={0.2}
+        focusOnClick
+        captions
+        fit="natural"
+        radius={0}
+        lensWidth={0.74}
+        lensHeight={1.18}
+        tilt={62}
+        roundness={1}
+        bend={0.34}
+        reach={0.38}
+        curl="twist"
+        dispersion={0.45}
+        liquid={0}
+        followCursor={false}
+        autoplay={false}
+        interval={4}
+        captureWheel
+        onChange={index => setActiveCert(index)}
+        style={{ color: textSecondary }}
+      />
+    </div>
 
-    {cert.gwa && (
+    {/* Active certification meta */}
+    <div className="flex items-center justify-center gap-2 flex-wrap">
       <span
-        className="font-mono text-xs px-2.5 py-0.5 rounded-full"
+        key={`cat-${activeCert}`}
+        className="font-mono text-xs px-2.5 py-0.5 rounded-full animate-[flex-carousel-title_520ms_cubic-bezier(0.22,1,0.36,1)] motion-reduce:animate-none"
         style={{
-          background: isDark
-            ? 'rgba(255,255,255,0.06)'
-            : 'rgba(0,0,0,0.05)',
+          background: currentCertColor.bg,
+          border: `1px solid ${currentCertColor.border}`,
+          color: currentCertColor.text,
+        }}
+      >
+        {currentCert.category}
+      </span>
+
+      <span
+        key={`date-${activeCert}`}
+        className="font-mono text-xs px-2.5 py-0.5 rounded-full animate-[flex-carousel-title_520ms_cubic-bezier(0.22,1,0.36,1)] motion-reduce:animate-none"
+        style={{
+          background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
           border: `1px solid ${cardBorder}`,
           color: textSecondary,
         }}
       >
-        {cert.gwa}
+        {currentCert.issued || currentCert.year}
       </span>
+
+      {currentCert.gwa && (
+        <span
+          key={`gwa-${activeCert}`}
+          className="font-mono text-xs px-2.5 py-0.5 rounded-full animate-[flex-carousel-title_520ms_cubic-bezier(0.22,1,0.36,1)] motion-reduce:animate-none"
+          style={{
+            background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+            border: `1px solid ${cardBorder}`,
+            color: textSecondary,
+          }}
+        >
+          {currentCert.gwa}
+        </span>
+      )}
+    </div>
+
+    {/* Verify link */}
+    {currentCert.url && (
+      <div className="flex justify-center">
+        <a
+          key={`link-${activeCert}`}
+          href={currentCert.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase px-4 py-2 rounded-full animate-[flex-carousel-title_520ms_cubic-bezier(0.22,1,0.36,1)] motion-reduce:animate-none"
+          style={{
+            background: tagBg,
+            border: `1px solid ${cardBorder}`,
+            color: textPrimary,
+            transition:
+              'border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease',
+            touchAction: 'manipulation',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = currentCertColor.border
+            e.currentTarget.style.transform = 'translateY(-2px)'
+            e.currentTarget.style.boxShadow =
+              `0 8px 24px rgba(0,0,0,0.2), 0 0 0 1px ${currentCertColor.border}`
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = cardBorder
+            e.currentTarget.style.transform = 'translateY(0)'
+            e.currentTarget.style.boxShadow = 'none'
+          }}
+        >
+          View certificate
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <path d="M15 3h6v6" />
+            <path d="M10 14 21 3" />
+          </svg>
+        </a>
+      </div>
     )}
   </div>
-
-  {/* Title */}
-  <span
-    className="font-mono text-sm font-semibold leading-snug"
-    style={{ color: textPrimary }}
-  >
-    {cert.name}
-  </span>
-
-  {/* Detail */}
-  <span
-    className="font-mono text-xs leading-relaxed"
-    style={{ color: textSecondary }}
-  >
-    {cert.detail}
-  </span>
 </div>
-                  )
-              })}
-    </div>
-  </div>
-</div>
-
-{/* Cert Preview Tooltip */}
-<CertPreview
-  cert={hoveredCert}
-  mouseX={mousePos.x}
-  mouseY={mousePos.y}
-  visible={!!hoveredCert}
-  isDark={isDark}
-/>
 
             {/* Skills */}
             <div className="col-span-1 lg:col-span-2 flex flex-col gap-4">
@@ -1215,7 +1230,7 @@ maxWidth: '700px' }}
               </div>
 
               <div
-                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6 items-start mx-auto"
+                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 items-start mx-auto"
                 style={{ maxWidth: '900px' }}
               >
                 {SKILL_CATEGORIES.map((group, gi) => (
@@ -1231,7 +1246,7 @@ maxWidth: '700px' }}
                       size={1.1}
                       isOpen={hoveredFolder === gi}
                       logo={group.folderLogo.startsWith('http') ? `${group.folderLogo}/${isDark ? 'ffffff' : '111111'}` : group.folderLogo}
-                      items={group.skills.map(skill => (
+                      items={group.skills.slice(0, 5).map(skill => (
                         <div className="flex items-center justify-center w-full h-full p-1">
                           <img
                             src={skill.logo.startsWith('http') ? `${skill.logo}/111111` : skill.logo}
@@ -1249,6 +1264,17 @@ maxWidth: '700px' }}
                     >
                       {group.category}
                     </span>
+                    <div className="flex flex-wrap justify-center gap-1">
+                      {group.skills.map(skill => (
+                        <span
+                          key={skill.name}
+                          className="font-mono text-[8.5px] leading-none px-1.5 py-1 rounded-full whitespace-nowrap"
+                          style={{ background: tagBg, border: `1px solid ${cardBorder}`, color: tagText }}
+                        >
+                          {skill.name}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
